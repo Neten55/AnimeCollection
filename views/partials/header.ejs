@@ -1,0 +1,14 @@
+<header>
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <% if (!user) { %>
+                <li><a href="/login">Login</a></li>
+                <li><a href="/register">Register</a></li>
+            <% } else { %>
+                <li><a href="/anime">My Anime</a></li>
+                <li><a href="/logout">Logout</a></li>
+            <% } %>
+        </ul>
+    </nav>
+</header>
