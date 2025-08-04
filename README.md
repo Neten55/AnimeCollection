@@ -11,37 +11,67 @@ The Anime Collection project is a web application that allows users to manage th
 
 ## File Structure
 ```
-anime-collection
-├── src
-│   ├── controllers
-│   │   ├── animeController.js
-│   │   └── authController.js
-│   ├── models
-│   │   ├── animeModel.js
-│   │   └── userModel.js
-│   ├── routes
-│   │   ├── animeRoutes.js
-│   │   └── authRoutes.js
-│   ├── views
-│   │   ├── anime.ejs
-│   │   ├── login.ejs
-│   │   └── register.ejs
-│   ├── config
-│   │   └── db.js
-│   ├── middleware
-│   │   └── authMiddleware.js
-│   └── app.js
-├── public
-│   └── index.html
-├── package.json
-├── .env
-└── README.md
+anime-collection/
+│
+├── app.js                       # Main Express app
+├── .env                         # Environment variables
+├── .gitignore                   # Ignore node_modules, .env, etc.
+├── package.json                 # NPM config & dependencies
+├── README.md                    # (Optional) Project overview
+│
+├── config/
+│   └── db.js                    # PostgreSQL connection
+│
+├── controllers/
+│   ├── adminController.js       # Admin: suspend/unsuspend users, logs
+│   ├── animeController.js       # CRUD logic for anime
+│   └── authController.js        # Register, login, logout
+│
+├── middleware/
+│   └── auth.js                  # Role/auth route protection
+│
+├── models/
+│   ├── animeModel.js            # Anime DB queries
+│   ├── logModel.js              # Log tracking
+│   └── userModel.js             # User DB queries + password handling
+│
+├── public/
+│   ├── css/
+│   │   └── styles.css           # Styling for the entire app
+│   ├── js/
+│   │   └── scripts.js           # JS for delete confirmation etc.
+│   └── images/
+│       └── logo.png             # (Optional) Logo or background image
+│
+├── routes/
+│   ├── adminRoutes.js           # Admin panel routes
+│   ├── animeRoutes.js           # Anime CRUD routes
+│   └── authRoutes.js            # Auth routes (login, register)
+│
+├── views/
+│   ├── partials/
+│   │   ├── header.ejs           # Top layout (title, nav)
+│   │   └── footer.ejs           # Footer layout
+│   │
+│   ├── anime/
+│   │   ├── list.ejs             # List of user's anime collection
+│   │   └── form.ejs             # Add/edit form
+│   │
+│   ├── auth/
+│   │   ├── login.ejs            # Login page
+│   │   └── register.ejs         # Register page
+│   │
+│   ├── admin/
+│   │   ├── users.ejs            # Admin dashboard: user table
+│   │   └── logs.ejs             # Admin log history
+│   │
+│   └── dashboard.ejs            # User dashboard after login
 ```
 
 ## Setup Instructions
 1. **Clone the repository**
    ```
-   git clone <repository-url>
+   git clone https://github.com/Neten55/AnimeCollection.git
    cd anime-collection
    ```
 
@@ -56,7 +86,7 @@ anime-collection
 
 4. **Run the application**
    ```
-   npm start
+   npm run start
    ```
 
 5. **Access the application**
