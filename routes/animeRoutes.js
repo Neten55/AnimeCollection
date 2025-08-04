@@ -1,17 +1,17 @@
 const express = require('express');
 const router = express.Router();
 const animeController = require('../controllers/animeController');
+const { ensureAuthenticated } = require('../middleware/auth');
 
-// List all anime for the logged-in user
-router.get('/', animeController.showAnimeList);
+// All routes below are protected
+router.use(ensureAuthenticated);
 
-// Create new anime
-router.post('/', animeController.createAnime);
+router.get('/', animeController.list);
+router.get('/new', animeController.showCreateForm);
+router.post('/', animeController.create);
 
-// Update anime (you can use a form with method override for PUT)
-router.post('/update/:id', animeController.updateAnime);
-
-// Delete anime
-router.post('/delete/:id', animeController.deleteAnime);
+router.get('/:id/edit', animeController.showEditForm);
+router.post('/:id/update', animeController.update);
+router.post('/:id/delete', animeController.delete);
 
 module.exports = router;

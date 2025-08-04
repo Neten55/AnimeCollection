@@ -1,0 +1,32 @@
+<%- include('../partials/header') %>
+<h2>Admin Panel - User Management</h2>
+<table border="1">
+  <tr>
+    <th>ID</th><th>Username</th><th>Role</th><th>Status</th><th>Action</th>
+  </tr>
+  <% users.forEach(user => { %>
+    <tr>
+      <td><%= user.id %></td>
+      <td><%= user.username %></td>
+      <td><%= user.role %></td>
+      <td><%= user.suspended ? "Suspended" : "Active" %></td>
+      <td>
+        <% if (user.role !== 'admin') { %>
+          <% if (user.suspended) { %>
+            <form method="POST" action="/admin/unsuspend/<%= user.id %>">
+              <button>Unsuspend</button>
+            </form>
+          <% } else { %>
+            <form method="POST" action="/admin/suspend/<%= user.id %>">
+              <button>Suspend</button>
+            </form>
+          <% } %>
+        <% } else { %>
+          N/A
+        <% } %>
+      </td>
+    </tr>
+  <% }) %>
+</table>
+<a href="/admin/logs">View Activity Logs</a>
+<%- include('../partials/footer') %>

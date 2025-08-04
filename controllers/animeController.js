@@ -1,35 +1,38 @@
-const Anime = require('../models/animeModel');
+const animeModel = require('../models/animeModel');
 
-module.exports = {
-    showAnimeList: async (req, res) => {
-        if (!req.session.user) return res.redirect('/login');
-        const animeList = await Anime.getAllAnimeByUser(req.session.user.id);
-        res.render('anime', { user: req.session.user, animeList, error: null });
-    },
+exports.listAnime = async (req, res) => {
+  const userId = req.session.userId;
+  const anime = await animeModel.getAllAnime(userId);
+  res.render('anime/list', { anime });
+};
 
-    createAnime: async (req, res) => {
-        if (!req.session.user) return res.redirect('/login');
-        const { title, status } = req.body;
-        if (!title || !status) {
-            const animeList = await Anime.getAllAnimeByUser(req.session.user.id);
-            return res.render('anime', { user: req.session.user, animeList, error: 'All fields required' });
-        }
-        await Anime.createAnime({ title, status, user_id: req.session.user.id });
-        res.redirect('/anime');
-    },
+exports.addAnime = async (req, res) => {
+  const { title, status } = req.body;
+  const userId = req.session.user.id;
 
-    updateAnime: async (req, res) => {
-        if (!req.session.user) return res.redirect('/login');
-        const { id } = req.params;
-        const { title, status } = req.body;
-        await Anime.updateAnime(id, req.session.user.id, { title, status });
-        res.redirect('/anime');
-    },
+  if (!title || !status) {
+    const animeList = await getAnimeByUserId(userId);
+    return res.render('main', { animeList, error: 'All fields are required.' });
+  }
 
-    deleteAnime: async (req, res) => {
-        if (!req.session.user) return res.redirect('/login');
-        const { id } = req.params;
-        await Anime.deleteAnime(id, req.session.user.id);
-        res.redirect('/anime');
-    }
+  await addAnime(title, status, userId);
+  res.redirect('/anime');
+};
+
+exports.editAnime = async (req, res) => {
+  const { title, status } = req.body;
+  const id = req.params.id;
+  await animeModel.updateAnime(id, title, status);
+  res.redirect('/anime');
+};
+
+exports.deleteAnime = async (req, res) => {
+  const id = req.params.id;
+  await animeModel.deleteAnime(id);
+  res.redirect('/anime');
+};
+exports.showAnime = async (req, res) => {
+  const userId = req.session.user.id;
+  const animeList = await getAnimeByUserId(userId);
+  res.render('main', { animeList, error: null });
 };

@@ -1,0 +1,9 @@
+<%- include('../partials/header') %>
+<h2>User Activity Logs</h2>
+<ul>
+  <% logs.forEach(log => { %>
+    <li><strong><%= log.username %></strong>: <%= log.action %> (<%= log.created_at.toLocaleString() %>)</li>
+  <% }) %>
+</ul>
+<a href="/admin">Back to Admin Dashboard</a>
+<%- include('../partials/footer') %>

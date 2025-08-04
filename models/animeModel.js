@@ -1,52 +1,40 @@
-const { Pool } = require('pg');
-const pool = new Pool({
-    user: process.env.DB_USER,
-    host: process.env.DB_HOST,
-    database: process.env.DB_NAME,
-    password: process.env.DB_PASSWORD,
-    port: process.env.DB_PORT,
-});
+const db = require('../config/db');
 
-class Anime {
-    static async createAnime({ title, status, user_id }) {
-        const result = await pool.query(
-            'INSERT INTO anime (title, status, user_id) VALUES ($1, $2, $3) RETURNING *',
-            [title, status, user_id]
-        );
-        return result.rows[0];
-    }
+module.exports = {
+  async getAllByUser(userId) {
+    const result = await db.query(
+      'SELECT * FROM anime WHERE user_id = $1 ORDER BY id DESC',
+      [userId]
+    );
+    return result.rows;
+  },
 
-    static async getAllAnimeByUser(user_id) {
-        const result = await pool.query(
-            'SELECT * FROM anime WHERE user_id = $1',
-            [user_id]
-        );
-        return result.rows;
-    }
+  async getById(id, userId) {
+    const result = await db.query(
+      'SELECT * FROM anime WHERE id = $1 AND user_id = $2',
+      [id, userId]
+    );
+    return result.rows[0];
+  },
 
-    static async getAnimeById(id, user_id) {
-        const result = await pool.query(
-            'SELECT * FROM anime WHERE id = $1 AND user_id = $2',
-            [id, user_id]
-        );
-        return result.rows[0];
-    }
+  async createAnime(data, userId) {
+    const { title, genre, status } = data;
+    const result = await db.query(
+      'INSERT INTO anime (title, genre, status, user_id) VALUES ($1, $2, $3, $4) RETURNING *',
+      [title, genre, status, userId]
+    );
+    return result.rows[0];
+  },
 
-    static async updateAnime(id, user_id, { title, status }) {
-        const result = await pool.query(
-            'UPDATE anime SET title = $1, status = $2 WHERE id = $3 AND user_id = $4 RETURNING *',
-            [title, status, id, user_id]
-        );
-        return result.rows[0];
-    }
+  async updateAnime(id, data, userId) {
+    const { title, genre, status } = data;
+    await db.query(
+      'UPDATE anime SET title = $1, genre = $2, status = $3 WHERE id = $4 AND user_id = $5',
+      [title, genre, status, id, userId]
+    );
+  },
 
-    static async deleteAnime(id, user_id) {
-        const result = await pool.query(
-            'DELETE FROM anime WHERE id = $1 AND user_id = $2 RETURNING *',
-            [id, user_id]
-        );
-        return result.rows[0];
-    }
-}
-
-module.exports = Anime;
+  async deleteAnime(id, userId) {
+    await db.query('DELETE FROM anime WHERE id = $1 AND user_id = $2', [id, userId]);
+  }
+};

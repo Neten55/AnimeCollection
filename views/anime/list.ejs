@@ -1,0 +1,15 @@
+<%- include('../partials/header') %>
+<h2>My Anime Collection</h2>
+<a href="/anime/new">Add New Anime</a>
+<ul>
+  <% animes.forEach(anime => { %>
+    <li>
+      <strong><%= anime.title %></strong> - <%= anime.genre %> - <%= anime.status %>
+      [ <a href="/anime/<%= anime.id %>/edit">Edit</a> ]
+      <form action="/anime/<%= anime.id %>/delete" method="POST" style="display:inline;">
+        <button onclick="return confirm('Are you sure?')">Delete</button>
+      </form>
+    </li>
+  <% }) %>
+</ul>
+<%- include('../partials/footer') %>

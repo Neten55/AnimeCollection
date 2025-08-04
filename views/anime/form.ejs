@@ -1,0 +1,13 @@
+<%- include('../partials/header') %>
+<h2><%= anime ? "Edit" : "Add" %> Anime</h2>
+<form method="POST" action="<%= anime ? '/anime/' + anime.id + '/update' : '/anime' %>">
+  <input type="text" name="title" placeholder="Title" value="<%= anime?.title || '' %>" required />
+  <input type="text" name="genre" placeholder="Genre" value="<%= anime?.genre || '' %>" required />
+  <select name="status">
+    <option value="Watching" <%= anime?.status === "Watching" ? 'selected' : '' %>>Watching</option>
+    <option value="Completed" <%= anime?.status === "Completed" ? 'selected' : '' %>>Completed</option>
+    <option value="On Hold" <%= anime?.status === "On Hold" ? 'selected' : '' %>>On Hold</option>
+  </select>
+  <button type="submit"><%= anime ? "Update" : "Add" %></button>
+</form>
+<%- include('../partials/footer') %>

@@ -1,0 +1,8 @@
+<%- include('./partials/header') %>
+<h2>Welcome <%= session.user.username %>!</h2>
+<a href="/anime">My Collection</a>
+<a href="/logout">Logout</a>
+<% if (session.user.role === 'admin') { %>
+  <a href="/admin">Admin Panel</a>
+<% } %>
+<%- include('./partials/footer') %>
